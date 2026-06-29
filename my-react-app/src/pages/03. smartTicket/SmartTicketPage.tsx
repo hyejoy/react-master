@@ -1,21 +1,28 @@
 import { useReducer } from "react";
 
+const SEAT_AMOUNT = 15000;
+const BASIC_DISCOUNT = 1.0;
+const VIP_DISCOUNT = 0.8;
+const SEATLIST = ["A1", "A2", "A3", "A4", "A5"] as const;
+
+type Seat = (typeof SEATLIST)[number]; // "A1" | "A2" | "A3" | "A4" | "A5"
+
 type User = {
   reservedSeats: string[];
   grade: "BASIC" | "VIP";
-  discount: 1.0 | 0.8;
+  discount: typeof BASIC_DISCOUNT | typeof VIP_DISCOUNT;
   totalAmount: number;
 };
 
 type TicketAction = {
   type: "CLICKSEAT" | "CHANGEGRADE";
-  payload?: { seat: "A1" | "A2" | "A3" | "A4" | "A5" };
+  payload?: { seat: Seat };
 };
 
 const initialData: User = {
   reservedSeats: [],
   grade: "BASIC",
-  discount: 1.0, // VIP : 0.8
+  discount: BASIC_DISCOUNT, // VIP : VIP_DISCOUNT
   totalAmount: 0,
 };
 
@@ -34,7 +41,7 @@ function ticketReducer(state: User, action: TicketAction) {
             (seat) => seat !== action.payload!.seat,
           ),
           totalAmount:
-            (state.reservedSeats.length - 1) * 15000 * state.discount,
+            (state.reservedSeats.length - 1) * SEAT_AMOUNT * state.discount,
         };
       } else {
         /** 자리 최대 4개 선택만 가능 */
@@ -47,16 +54,17 @@ function ticketReducer(state: User, action: TicketAction) {
           ...state,
           reservedSeats: [...state.reservedSeats, action.payload!.seat],
           totalAmount:
-            (state.reservedSeats.length + 1) * 15000 * state.discount,
+            (state.reservedSeats.length + 1) * SEAT_AMOUNT * state.discount,
         };
       }
     case "CHANGEGRADE":
-      const newDiscount = state.grade === "BASIC" ? 0.8 : 1.0;
+      const newDiscount =
+        state.grade === "BASIC" ? VIP_DISCOUNT : BASIC_DISCOUNT;
       return {
         ...state,
         grade: (state.grade === "BASIC" ? "VIP" : "BASIC") as "BASIC" | "VIP", // 여기서 왜 grade가 string으로 추적되는지 알려줘
-        discount: newDiscount as 1.0 | 0.8,
-        totalAmount: state.reservedSeats.length * 15000 * newDiscount,
+        discount: newDiscount as typeof BASIC_DISCOUNT | typeof VIP_DISCOUNT,
+        totalAmount: state.reservedSeats.length * SEAT_AMOUNT * newDiscount,
       };
     default:
       return state;
@@ -76,11 +84,11 @@ export default function SmartTicketPage() {
       </h1>
 
       <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-        {["A1", "A2", "A3", "A4", "A5"].map((seat) => (
+        {SEATLIST.map((seat) => (
           <button
             key={seat}
             style={
-              ticket.reservedSeats.find((reserved) => reserved === seat)
+              ticket.reservedSeats.includes(seat)
                 ? { border: "none", backgroundColor: "#2980b9" }
                 : { boxShadow: "0 1px #2980b9" }
             }
