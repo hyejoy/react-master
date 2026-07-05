@@ -1,10 +1,15 @@
 import { useState } from "react";
-import type { Gemini } from "../store/tasks/geminiTypes";
 
 export default function TaskInput({
-  onClick,
+  onCreate,
 }: {
-  onClick: (payload: Pick<Partial<Gemini>, "name" | "description">) => void;
+  onCreate: ({
+    name,
+    description,
+  }: {
+    name: string;
+    description: string;
+  }) => void;
 }) {
   const [inputName, setInputName] = useState("");
   const [inputDescription, setDescription] = useState("");
@@ -23,7 +28,7 @@ export default function TaskInput({
       />
       <button
         onClick={() => {
-          onClick({ name: inputName, description: inputDescription });
+          onCreate({ name: inputName, description: inputDescription });
           setInputName("");
           setDescription("");
         }}

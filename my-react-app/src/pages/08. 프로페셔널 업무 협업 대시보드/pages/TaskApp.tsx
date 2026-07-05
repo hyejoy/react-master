@@ -8,13 +8,19 @@ import {
   updatePriority,
 } from "../store/tasks/geminiActons";
 import { geminiReducer, initialGemini } from "../store/tasks/geminiReducer";
-import type { GeminiPayload, Prioprity } from "../store/tasks/geminiTypes";
+import type { Prioprity } from "../store/tasks/geminiTypes";
 
 export default function TaskApp() {
   const [state, dispatch] = useReducer(geminiReducer, initialGemini);
 
-  const onCreate = (payload: Pick<GeminiPayload, "name" | "description">) => {
-    dispatch(addTask(payload));
+  const onCreate = ({
+    name,
+    description,
+  }: {
+    name: string;
+    description: string;
+  }) => {
+    dispatch(addTask({ name, description }));
   };
 
   const onDelete = (id: number) => {
@@ -31,7 +37,7 @@ export default function TaskApp() {
 
   return (
     <>
-      <TaskInput onClick={onCreate} />
+      <TaskInput onCreate={onCreate} />
       <TaskItem
         state={state.items}
         toggleDone={toggleDone}
