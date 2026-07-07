@@ -1,8 +1,5 @@
 import { useContext } from "react";
-import {
-  LanguageContext,
-  type Language,
-} from "../contexts/LanguageContext";
+import { LanguageContext, type Language } from "../contexts/LanguageContext";
 
 export default function ContentCard() {
   const lang = useContext(LanguageContext);
