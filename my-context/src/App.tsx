@@ -1,9 +1,10 @@
-import CenterApp from "./12. Context 내부구조 해부/pages/CenterApp";
+import { ThemeProvider } from "./13. 다크모드 테마 스위치/Contexts/ThemeProvider";
+import AppContent from "./13. 다크모드 테마 스위치/Pages/AppContent";
 
 export default function App() {
   return (
-    <>
-      <CenterApp />
-    </>
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
