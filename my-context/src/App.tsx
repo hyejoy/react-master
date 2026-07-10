@@ -1,5 +1,10 @@
-import ToastMall from "./15. 전역 알림(Toast) 엔진 시스템 구축/pages/ToastMall";
+import Dashboard from "./16. 실시간 대시보드의 데이터 패칭 엔진 구현/components/dashboard";
+import { AuthEngineProvider } from "./16. 실시간 대시보드의 데이터 패칭 엔진 구현/contexts/AuthEngineProvider";
 
 export default function App() {
-  return <ToastMall />;
+  return (
+    <AuthEngineProvider>
+      <Dashboard />
+    </AuthEngineProvider>
+  );
 }
