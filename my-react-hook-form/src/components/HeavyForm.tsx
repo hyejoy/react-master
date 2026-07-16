@@ -3,6 +3,13 @@ import { useState } from "react";
 export default function HeavyForm() {
   // 거대한 상태 객체 초기화
   // 필드 100개를 가진 객체를 생성 {field_0: '',.....,field_99:''}
+  /**
+   * Array.from({ length: 100 }, (_, i) => [`field_${i}`, ''])
+    // [['field_0', ''], ['field_1', ''], ... ['field_99', '']]
+
+    Object.fromEntries(...)
+    // { field_0: '', field_1: '', ... field_99: '' }
+   */
   const [formData, setFormData] = useState<Record<string, string>>(
     Object.fromEntries(
       Array.from({ length: 3000 }, (_, i) => [`field_${i}`, ""]),
